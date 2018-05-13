@@ -36,6 +36,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4882057262774968}
   - component: {fileID: 114478160066167186}
+  - component: {fileID: 95471175705195814}
   m_Layer: 0
   m_Name: Player Pivot
   m_TagString: Untagged
@@ -50,7 +51,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1469194279105300}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 3.46, z: 0}
+  m_LocalPosition: {x: 0, y: 3.48, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4882057262774968}
@@ -70,6 +71,24 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!95 &95471175705195814
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1702504070518332}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: d55cbce208f67d643895fc170773eff0, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!114 &114478160066167186
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -82,9 +101,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playertTransform: {fileID: 4344056582457074}
-  speed: -50
+  animator: {fileID: 95471175705195814}
+  moveSpeed: 0
+  transitionSpeed: 3
   onHeight: 4.2
-  underHeight: 3.46
+  underHeight: 3.48
 --- !u!212 &212116942858099152
 SpriteRenderer:
   m_ObjectHideFlags: 1
