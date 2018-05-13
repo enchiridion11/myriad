@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -23,6 +24,16 @@ public class Player : MonoBehaviour {
     [SerializeField]
     float underHeight;
 
+    [SerializeField]
+    playerState state;
+    
+    enum playerState {
+        CEILING,
+        FLOOR,
+        TRANSITION
+    }
+
+
     static Player instance;
 
     #endregion
@@ -42,14 +53,14 @@ public class Player : MonoBehaviour {
     void Awake () {
         instance = this;
     }
-    
+
     void Update () {
-        if (Input.GetKeyDown(KeyCode.S)) {
-            CeilingToFloor();
+        if (Input.GetKeyDown (KeyCode.S)) {
+            CeilingToFloor ();
         }
 
-        if (Input.GetKeyDown(KeyCode.W)) {
-            FloorToCeiling();
+        if (Input.GetKeyDown (KeyCode.W)) {
+            FloorToCeiling ();
         }
         MovePlayer ();
     }
@@ -89,7 +100,7 @@ public class Player : MonoBehaviour {
     public void CeilingToFloor () {
         animator.Play ("player_ceilingToFloor");
     }
-    
+
     public void FloorToCeiling () {
         animator.Play ("player_floorToCeiling");
     }

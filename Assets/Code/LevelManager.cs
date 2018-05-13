@@ -59,6 +59,10 @@ public class LevelManager : MonoBehaviour {
         get { return instance; }
     }
 
+    public List<Transform> Levels {
+        get { return levels; }
+    }
+
     public Color[] LevelColors {
         get { return levelColors; }
     }
