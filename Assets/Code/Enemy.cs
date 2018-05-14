@@ -3,20 +3,33 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Enemy : MonoBehaviour {
+    #region Fields
 
-	#region Fields
+    [SerializeField]
+    Transform enemyTransform;
 
-	#endregion
+    [SerializeField]
+    CircleCollider2D collider;
 
-	#region Properties
+    #endregion
 
-	#endregion
-	
-	#region Methods
-	
-	#region Unity
+    #region Properties
 
-	#endregion
+    public CircleCollider2D Collider {
+        get { return collider; }
+    }
 
-	#endregion
+    public Transform EnemyTransform {
+        get { return enemyTransform; }
+    }
+
+    #endregion
+
+    #region Methods
+
+    #region Unity
+
+    #endregion
+
+    #endregion
 }

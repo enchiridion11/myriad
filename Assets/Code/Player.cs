@@ -7,7 +7,7 @@ public class Player : MonoBehaviour {
     #region Fields
 
     [SerializeField]
-    Transform playertTransform;
+    Transform playerPivot;
 
     [SerializeField]
     Animator animator;
@@ -16,20 +16,13 @@ public class Player : MonoBehaviour {
     int moveSpeed;
 
     [SerializeField]
-    int transitionSpeed;
-
-    [SerializeField]
-    float onHeight;
-
-    [SerializeField]
-    float underHeight;
-
-    [SerializeField]
     playerState state;
-    
+
     enum playerState {
-        CEILING,
-        FLOOR,
+        CEILING_CLOCKWISE,
+        CEILING_ANTI,
+        FLOOR_CLOCKWISE,
+        FLOOR_ANTI,
         TRANSITION
     }
 
@@ -55,54 +48,47 @@ public class Player : MonoBehaviour {
     }
 
     void Update () {
-        if (Input.GetKeyDown (KeyCode.S)) {
-            CeilingToFloor ();
+        if (Input.GetKeyDown(KeyCode.S)) {
+            CeilingToFloor();
         }
 
-        if (Input.GetKeyDown (KeyCode.W)) {
-            FloorToCeiling ();
+        if (Input.GetKeyDown(KeyCode.W)) {
+            FloorToCeiling();
         }
-        MovePlayer ();
+        MovePlayer();
+    }
+
+    void OnTriggerEnter2D (Collider2D enter) {
+        if (enter.CompareTag("Gap")) {
+            switch (state) {
+                case playerState.CEILING_CLOCKWISE:
+                    print("CEILING_CLOCKWISE");
+                    moveSpeed = 0;
+                    animator.Play("player_gapCeilingClockwise");
+                    state = playerState.FLOOR_ANTI;
+                    break;
+            }
+        }
     }
 
     #endregion
 
-    public IEnumerator SwitchToUnderHeight () {
-        var currentHeight = playertTransform.localPosition.y;
-        while (currentHeight > underHeight) {
-            currentHeight -= Time.deltaTime * transitionSpeed;
-            playertTransform.localPosition = new Vector2 (0f, currentHeight);
-            yield return null;
-        }
-        playertTransform.localPosition = new Vector2 (0f, underHeight);
-    }
-
-    public IEnumerator SwitchToOnHeight () {
-        var currentHeight = playertTransform.localPosition.y;
-        while (currentHeight < onHeight) {
-            currentHeight += Time.deltaTime * transitionSpeed;
-            playertTransform.localPosition = new Vector2 (0f, currentHeight);
-            yield return null;
-        }
-        playertTransform.localPosition = new Vector2 (0f, onHeight);
-    }
-
     void MovePlayer () {
-        var euler = transform.eulerAngles;
+        var euler = playerPivot.eulerAngles;
         euler.z += Time.deltaTime * moveSpeed;
-        transform.eulerAngles = euler;
+        playerPivot.eulerAngles = euler;
     }
 
-    void SetMoveSpeed () {
-        animator.SetFloat ("MoveSpeed", moveSpeed);
+    public void SetMoveSpeed (int speed) {
+        moveSpeed = speed;
     }
 
     public void CeilingToFloor () {
-        animator.Play ("player_ceilingToFloor");
+        animator.Play("player_ceilingToFloor");
     }
 
     public void FloorToCeiling () {
-        animator.Play ("player_floorToCeiling");
+        animator.Play("player_floorToCeiling");
     }
 
     #endregion

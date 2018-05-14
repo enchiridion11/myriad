@@ -11,11 +11,17 @@ public class Level : MonoBehaviour {
     [SerializeField]
     SpriteRenderer spriteRenderer;
 
-    [SerializeField]
+    [Header("Enemies"), SerializeField]
     GameObject enemyPrefab;
 
     [SerializeField]
-    GameObject gabPrefab;
+    Transform enemyParent;
+
+    [Header("Gaps"), SerializeField]
+    GameObject gapPrefab;
+
+    [SerializeField]
+    Transform gapParent;
 
     LevelManager levelManager;
 
@@ -39,33 +45,33 @@ public class Level : MonoBehaviour {
 
     public void Initialize () {
         // set random color
-        spriteRenderer.color = GetLevelColor ();
+        spriteRenderer.color = GetLevelColor();
 
-        CreateGaps ();
-        CreateEnemies ();
+        CreateGaps();
+        CreateEnemies();
 
         // set random rotation
         var euler = transform.eulerAngles;
-        euler.z = Random.Range (0f, 360f);
+        euler.z = Random.Range(0f, 360f);
         transform.eulerAngles = euler;
     }
 
     public void ShowLevel () {
-        gameObject.SetActive (true);
-        gameObject.transform.SetParent (levelManager.transform);
+        gameObject.SetActive(true);
+        gameObject.transform.SetParent(levelManager.transform);
         IsActive = true;
     }
 
     public void HideLevel () {
-        gameObject.SetActive (false);
-        gameObject.transform.SetParent (levelManager.LevelPool);
+        gameObject.SetActive(false);
+        gameObject.transform.SetParent(levelManager.LevelPool);
         IsActive = false;
     }
 
     Color GetLevelColor () {
-        var colors = new List<Color> (levelManager.LevelColors.Length);
-        colors.AddRange (levelManager.LevelColors);
-        return colors[Random.Range (0, levelManager.LevelColors.Length)];
+        var colors = new List<Color>(levelManager.LevelColors.Length);
+        colors.AddRange(levelManager.LevelColors);
+        return colors[Random.Range(0, levelManager.LevelColors.Length)];
     }
 
     void CreateGaps () {
@@ -75,16 +81,17 @@ public class Level : MonoBehaviour {
         }
 
         // get random amount of gaps to spawn
-        var amount = Random.Range (3, 7);
+        var amount = Random.Range(3, 7);
 
-        var unusedRotations = GetGapRoationList ();
+        var unusedRotations = GetGapRoationList();
 
         for (var i = 0; i < amount; i++) {
-            var newRotation = GetRandomGapRoation (unusedRotations);
+            var newRotation = GetRandomGapRoation(unusedRotations);
 
-            var go = Instantiate (gabPrefab);
-            go.transform.SetParent (transform);
+            var go = Instantiate(gapPrefab);
+            go.transform.SetParent(gapParent);
             go.transform.localScale = transform.localScale;
+            go.name = "Gap " + (i + 1);
 
             // set random rotation
             var euler = go.transform.eulerAngles;
@@ -100,41 +107,42 @@ public class Level : MonoBehaviour {
         }
 
         // get random amount of enemies to spawn
-        var amount = Random.Range (0, 6);
+        var amount = Random.Range(0, 10);
 
         for (var i = 0; i < amount; i++) {
-            var go = Instantiate (enemyPrefab);
-            go.transform.SetParent (transform);
+            var go = Instantiate(enemyPrefab).GetComponent<Enemy>();
+            go.transform.SetParent(enemyParent);
             go.transform.localScale = transform.localScale;
+            go.name = "Enemy " + (i + 1);
 
             // set random rotation
             var euler = go.transform.eulerAngles;
-            euler.z = Random.Range (0f, 360f);
+            euler.z = Random.Range(0f, 360f);
             go.transform.eulerAngles = euler;
 
             // check overlapping
-            var collisions = Physics2D.OverlapCircleAll (go.transform.GetChild (0).position, GetComponentInChildren<CircleCollider2D> ().radius + 1f);
-            print (collisions.Length);
-            var count = 0;
-            while (collisions.Length > 1 && count < 100) {
-                euler.z += 15f;
+            var collisions = Physics2D.OverlapCircleAll(go.EnemyTransform.position, go.Collider.radius);
+            var loopSafety = 0;
+            while (collisions.Length > 1 && loopSafety < 20) {
+                euler.z += 20f;
                 go.transform.eulerAngles = euler;
-                count++;
+                collisions = Physics2D.OverlapCircleAll(go.EnemyTransform.position, go.Collider.radius);
+                loopSafety++;
             }
         }
     }
 
     List<int> GetGapRoationList () {
-        var rotations = new List<int> (8);
+        var rotations = new List<int>(8);
         for (var i = 0; i < 8; i++) {
-            rotations.Add (i);
+            rotations.Add(i);
         }
         return rotations;
     }
 
     int GetRandomGapRoation (List<int> rotations) {
-        var rotation = Random.Range (rotations[0], rotations.Count) * 45;
-        rotations.Remove (rotation);
+        var rotation = Random.Range(rotations[0], rotations.Count) * 45;
+        rotations.Remove(rotation);
         return rotation;
     }
 
