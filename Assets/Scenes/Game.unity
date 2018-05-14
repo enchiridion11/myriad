@@ -807,6 +807,7 @@ MonoBehaviour:
   - {r: 0.9960785, g: 0.5921569, b: 0.1254902, a: 1}
   offsetText: {fileID: 1002906386}
   levelText: {fileID: 171490004}
+  gravityButton: {fileID: 2085620129}
 --- !u!4 &290664586
 Transform:
   m_ObjectHideFlags: 0
@@ -2875,6 +2876,10 @@ Prefab:
       propertyPath: m_RootOrder
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4344056582457074, guid: c0790bdb954e5d44fa9d04938507f8a3, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: c0790bdb954e5d44fa9d04938507f8a3, type: 2}
   m_IsPrefabParent: 0
@@ -2907,11 +2912,11 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4624616002050102, guid: 4c4dc7c618d871040aedfc84cdab9bd4, type: 2}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0.13052587
       objectReference: {fileID: 0}
     - target: {fileID: 4624616002050102, guid: 4c4dc7c618d871040aedfc84cdab9bd4, type: 2}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0.99144495
       objectReference: {fileID: 0}
     - target: {fileID: 4624616002050102, guid: 4c4dc7c618d871040aedfc84cdab9bd4, type: 2}
       propertyPath: m_RootOrder
@@ -2932,6 +2937,10 @@ Prefab:
     - target: {fileID: 4624616002050102, guid: 4c4dc7c618d871040aedfc84cdab9bd4, type: 2}
       propertyPath: m_LocalScale.z
       value: 0.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 4624616002050102, guid: 4c4dc7c618d871040aedfc84cdab9bd4, type: 2}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 15.000001
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 4c4dc7c618d871040aedfc84cdab9bd4, type: 2}

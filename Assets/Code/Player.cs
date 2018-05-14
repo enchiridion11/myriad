@@ -39,6 +39,12 @@ public class Player : MonoBehaviour {
 
     #endregion
 
+    #region Events
+
+    public Action<bool> OnPlayerGrounded;
+
+    #endregion
+
     #region Methods
 
     #region Unity
@@ -64,9 +70,19 @@ public class Player : MonoBehaviour {
                 case playerState.CEILING_CLOCKWISE:
                     print("CEILING_CLOCKWISE");
                     moveSpeed = 0;
-                    animator.Play("player_gapCeilingClockwise");
+                    animator.Play("player_gapCeilingToFloorClockwise");
                     state = playerState.FLOOR_ANTI;
                     break;
+                case playerState.FLOOR_ANTI:
+                    print("FLOOR_ANTI");
+                    moveSpeed = 0;
+                    animator.Play("player_gapFloorToCeilingAntiClockwise");
+                    state = playerState.CEILING_CLOCKWISE;
+                    break;
+            }
+            
+            if (OnPlayerGrounded != null) {
+                OnPlayerGrounded(false);
             }
         }
     }
@@ -89,6 +105,12 @@ public class Player : MonoBehaviour {
 
     public void FloorToCeiling () {
         animator.Play("player_floorToCeiling");
+    }
+
+    public void PlayerGrounded () {
+        if (OnPlayerGrounded != null) {
+            OnPlayerGrounded(true);
+        }
     }
 
     #endregion

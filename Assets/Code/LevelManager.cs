@@ -32,11 +32,14 @@ public class LevelManager : MonoBehaviour {
     [Header ("Other"), SerializeField]
     Color[] levelColors;
 
-    [SerializeField]
+    [Header ("UI"), SerializeField]
     Text offsetText;
 
     [SerializeField]
     Text levelText;
+    
+    [SerializeField]
+    Button gravityButton;
 
     int currentLevel = 1;
 
@@ -75,13 +78,15 @@ public class LevelManager : MonoBehaviour {
 
     #region Events
 
-    public Action OnLevelsScaled;
-
     #endregion
 
     #region Methods
 
     #region Unity
+
+    void OnEnable () {
+        Player.Instance.OnPlayerGrounded += SetGravityButton;
+    }
 
     void Awake () {
         instance = this;
@@ -97,6 +102,10 @@ public class LevelManager : MonoBehaviour {
         if (Input.GetKeyDown (KeyCode.DownArrow)) {
             ScaleLevelsDown ();
         }
+    }
+    
+    void OnDisable () {
+        Player.Instance.OnPlayerGrounded -= SetGravityButton;
     }
 
     #endregion
@@ -269,6 +278,10 @@ public class LevelManager : MonoBehaviour {
             gravity = gravityDirection.UP;
             Player.Instance.FloorToCeiling ();
         }
+    }
+
+    void SetGravityButton (bool isGrounded) {
+        gravityButton.interactable = isGrounded;
     }
 
     #endregion
