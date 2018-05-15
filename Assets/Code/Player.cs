@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour {
     #region Fields
@@ -19,13 +20,12 @@ public class Player : MonoBehaviour {
     playerState state;
 
     enum playerState {
-        CEILING_CLOCKWISE,
-        CEILING_ANTI,
-        FLOOR_CLOCKWISE,
-        FLOOR_ANTI,
-        TRANSITION
+        CEILING_CLOCKWISE, // 0
+        CEILING_ANTI, // 1
+        FLOOR_CLOCKWISE, // 2
+        FLOOR_ANTI, // 3
+        FALLING // 4
     }
-
 
     static Player instance;
 
@@ -42,6 +42,10 @@ public class Player : MonoBehaviour {
     #region Events
 
     public Action<bool> OnPlayerGrounded;
+
+    public Action OnFallingDownGap;
+
+    public Action OnFallingUpGap;
 
     #endregion
 
@@ -68,22 +72,47 @@ public class Player : MonoBehaviour {
         if (enter.CompareTag("Gap")) {
             switch (state) {
                 case playerState.CEILING_CLOCKWISE:
-                    print("CEILING_CLOCKWISE");
                     moveSpeed = 0;
                     animator.Play("player_gapCeilingToFloorClockwise");
-                    state = playerState.FLOOR_ANTI;
+                    LevelManager.Instance.SetGravity(LevelManager.GravityDirection.DOWN);
                     break;
                 case playerState.FLOOR_ANTI:
-                    print("FLOOR_ANTI");
                     moveSpeed = 0;
                     animator.Play("player_gapFloorToCeilingAntiClockwise");
-                    state = playerState.CEILING_CLOCKWISE;
+                    LevelManager.Instance.SetGravity(LevelManager.GravityDirection.UP);
+                    break;
+                case playerState.FLOOR_CLOCKWISE:
+                    moveSpeed = 0;
+                    animator.Play("player_gapFloorToCeilingClockwise");
+                    LevelManager.Instance.SetGravity(LevelManager.GravityDirection.UP);
+                    break;
+                case playerState.CEILING_ANTI:
+                    moveSpeed = 0;
+                    animator.Play("player_gapCeilingToFloorAntiClockwise");
+                    LevelManager.Instance.SetGravity(LevelManager.GravityDirection.DOWN);
+                    break;
+                case playerState.FALLING:
+                    moveSpeed = 0;
+                    if (LevelManager.Instance.Gravity == LevelManager.GravityDirection.UP) {
+                        if (OnFallingUpGap != null) {
+                            OnFallingUpGap();
+                        }
+                    }
+                    else if (LevelManager.Instance.Gravity == LevelManager.GravityDirection.DOWN) {
+                        if (OnFallingDownGap != null) {
+                            OnFallingDownGap();
+                        }
+                    }
                     break;
             }
-            
+
             if (OnPlayerGrounded != null) {
                 OnPlayerGrounded(false);
             }
+        }
+
+        if (enter.CompareTag("Enemy")) {
+            Die();
         }
     }
 
@@ -100,17 +129,43 @@ public class Player : MonoBehaviour {
     }
 
     public void CeilingToFloor () {
-        animator.Play("player_ceilingToFloor");
+        switch (state) {
+            case playerState.CEILING_CLOCKWISE:
+                SetPlayerState(4);
+                animator.Play("player_ceilingToFloorClockwise");
+                break;
+            case playerState.CEILING_ANTI:
+                SetPlayerState(4);
+                animator.Play("player_ceilingToFloorAntiClockwise");
+                break;
+        }
     }
 
     public void FloorToCeiling () {
-        animator.Play("player_floorToCeiling");
+        switch (state) {
+            case playerState.FLOOR_CLOCKWISE:
+                SetPlayerState(4);
+                animator.Play("player_floorToCeilingClockwise");
+                break;
+            case playerState.FLOOR_ANTI:
+                SetPlayerState(4);
+                animator.Play("player_floorToCeilingAntiClockwise");
+                break;
+        }
+    }
+
+    public void SetPlayerState (int index) {
+        state = (playerState) index;
     }
 
     public void PlayerGrounded () {
         if (OnPlayerGrounded != null) {
             OnPlayerGrounded(true);
         }
+    }
+
+    public void Die () {
+        SceneManager.LoadScene("Game");
     }
 
     #endregion

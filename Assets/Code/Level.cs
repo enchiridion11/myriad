@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor.MemoryProfiler;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -58,12 +55,14 @@ public class Level : MonoBehaviour {
 
     public void ShowLevel () {
         gameObject.SetActive(true);
+        //spriteRenderer.color = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, 1f);
         gameObject.transform.SetParent(levelManager.transform);
         IsActive = true;
     }
 
     public void HideLevel () {
         gameObject.SetActive(false);
+        // spriteRenderer.color = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, 0.1f);
         gameObject.transform.SetParent(levelManager.LevelPool);
         IsActive = false;
     }
@@ -81,7 +80,7 @@ public class Level : MonoBehaviour {
         }
 
         // get random amount of gaps to spawn
-        var amount = Random.Range(3, 7);
+        var amount = Random.Range(2, 5);
 
         var unusedRotations = GetGapRoationList();
 
@@ -102,12 +101,12 @@ public class Level : MonoBehaviour {
 
     void CreateEnemies () {
         // don't create enemies if it's the first level
-        if (levelManager.Levels.Count == 0) {
+        if (levelManager.Levels.Count <= 10) {
             return;
         }
 
         // get random amount of enemies to spawn
-        var amount = Random.Range(0, 10);
+        var amount = Random.Range(0, levelManager.Levels.Count - 9);
 
         for (var i = 0; i < amount; i++) {
             var go = Instantiate(enemyPrefab).GetComponent<Enemy>();
