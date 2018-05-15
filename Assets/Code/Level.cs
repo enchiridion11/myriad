@@ -9,6 +9,9 @@ public class Level : MonoBehaviour {
     [SerializeField]
     SpriteRenderer spriteRenderer;
 
+    [SerializeField]
+    PolygonCollider2D collider;
+
     [Header ("Enemies"), SerializeField]
     GameObject enemyPrefab;
 
@@ -59,6 +62,10 @@ public class Level : MonoBehaviour {
         var euler = transform.eulerAngles;
         euler.z = Random.Range (0f, 360f);
         transform.eulerAngles = euler;
+
+        if (levelManager.Levels.Count > 0) {
+            collider.enabled = true;
+        }
     }
 
     public void ShowLevel () {
@@ -103,6 +110,10 @@ public class Level : MonoBehaviour {
             var eulerVector = go.transform.eulerAngles;
             eulerVector.z = Math.Abs (newRotation);
             go.transform.localRotation = Quaternion.Euler (eulerVector);
+
+            // bind events
+            var gap = go.GetComponentInChildren<LevelGap> ();
+            gap.OnPlayerColliding += SetCollider;
         }
     }
 
@@ -130,7 +141,7 @@ public class Level : MonoBehaviour {
             var collisions = Physics2D.OverlapCircleAll (go.CollectableTransform.position, go.Collider.radius);
             var loopSafety = 0;
             while (collisions.Length > 1 && loopSafety < 20) {
-                euler.z += 20f;
+                euler.z += 10f;
                 go.transform.eulerAngles = euler;
                 collisions = Physics2D.OverlapCircleAll (go.CollectableTransform.position, go.Collider.radius);
                 loopSafety++;
@@ -161,8 +172,10 @@ public class Level : MonoBehaviour {
             // check overlapping
             var collisions = Physics2D.OverlapCircleAll (go.EnemyTransform.position, go.Collider.radius);
             var loopSafety = 0;
+            print (collisions.Length);
             while (collisions.Length > 1 && loopSafety < 20) {
-                euler.z += 20f;
+                euler.z += 10f;
+                go.gameObject.SetActive (false);
                 go.transform.eulerAngles = euler;
                 collisions = Physics2D.OverlapCircleAll (go.EnemyTransform.position, go.Collider.radius);
                 loopSafety++;
@@ -184,6 +197,10 @@ public class Level : MonoBehaviour {
         var rotation = multiple * angle;
         rotations.Remove (multiple);
         return rotation;
+    }
+
+    public void SetCollider (bool state) {
+        collider.enabled = state;
     }
 
     #endregion

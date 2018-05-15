@@ -271,7 +271,7 @@ public class LevelManager : MonoBehaviour {
 
     public IEnumerator AnimateScaleDown (Transform level, float startValue, float endValue) {
         while (startValue > endValue) {
-            startValue -= Time.deltaTime * scaleSpeed; // * startValue; offset
+            startValue -= Time.deltaTime * scaleSpeed * startValue;
             level.localScale = new Vector2 (startValue, startValue);
             yield return null;
         }
@@ -282,7 +282,7 @@ public class LevelManager : MonoBehaviour {
 
     public IEnumerator AnimateScaleUp (Transform level, float startValue, float endValue) {
         while (startValue < endValue) {
-            startValue += Time.deltaTime * scaleSpeed; // * startValue; offset
+            startValue += Time.deltaTime * scaleSpeed * startValue;
             level.localScale = new Vector2 (startValue, startValue);
             yield return null;
         }
@@ -314,6 +314,9 @@ public class LevelManager : MonoBehaviour {
             ScaleLevelsUp ();
             gravity = GravityDirection.DOWN;
             Player.Instance.CeilingToFloor ();
+            if (currentLevel == 2) {
+                levels[0].GetComponent<Level> ().SetCollider (true);
+            }
         }
         else if (gravity == GravityDirection.DOWN) {
             ScaleLevelsDown ();
@@ -348,10 +351,6 @@ public class LevelManager : MonoBehaviour {
     public void RestartGame () {
         PlayerPrefs.SetInt ("HighScore", currentLevel);
         SceneManager.LoadScene ("Game");
-    }
-
-    void OnApplicationQuit () {
-        PlayerPrefs.SetInt ("HighScore", currentLevel);
     }
 
     #endregion

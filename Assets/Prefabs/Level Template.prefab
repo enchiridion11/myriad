@@ -135,7 +135,7 @@ PolygonCollider2D:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1204415180888418}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Density: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 0
@@ -535,6 +535,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spriteRenderer: {fileID: 212152074261733414}
+  collider: {fileID: 60277736897620704}
   enemyPrefab: {fileID: 1003283514309560, guid: 5c297be3d7848bd4e8948012619618cc,
     type: 2}
   enemyParent: {fileID: 4827598158187496}

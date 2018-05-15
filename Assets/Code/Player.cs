@@ -15,9 +15,9 @@ public class Player : MonoBehaviour {
 
     [SerializeField]
     int moveSpeed;
-    
+
     [SerializeField]
-    bool isGrounded;
+    bool isGrounded = true;
 
     [SerializeField]
     PlayerState state;
@@ -40,6 +40,10 @@ public class Player : MonoBehaviour {
 
     public static Player Instance {
         get { return instance; }
+    }
+    
+    public bool IsGrounded {
+        get { return isGrounded; }
     }
 
     #endregion
@@ -66,84 +70,110 @@ public class Player : MonoBehaviour {
     }
 
     void Update () {
-        if (Input.GetKeyDown(KeyCode.S)) {
-            CeilingToFloor();
+        if (Input.GetKeyDown (KeyCode.S)) {
+            CeilingToFloor ();
         }
 
-        if (Input.GetKeyDown(KeyCode.W)) {
-            FloorToCeiling();
+        if (Input.GetKeyDown (KeyCode.W)) {
+            FloorToCeiling ();
         }
 
-        MovePlayer();
+        MovePlayer ();
     }
 
     void OnTriggerEnter2D (Collider2D other) {
-        if (other.CompareTag("Gap")) {
-            switch (state) {
-                case PlayerState.CEILING_CLOCKWISE:
-                    // print("CEILING_CLOCKWISE");
-                    moveSpeed = 0;
-                    animator.Play("player_gapCeilingToFloorClockwise");
-                    LevelManager.Instance.SetGravity(LevelManager.GravityDirection.DOWN);
-                    if (OnPlayerDirectionChange != null) {
-                        OnPlayerDirectionChange();
-                    }
-                    break;
-                case PlayerState.FLOOR_ANTI:
-                    //  print("FLOOR_ANTI");
-                    moveSpeed = 0;
-                    animator.Play("player_gapFloorToCeilingAntiClockwise");
-                    LevelManager.Instance.SetGravity(LevelManager.GravityDirection.UP);
-                    if (OnPlayerDirectionChange != null) {
-                        OnPlayerDirectionChange();
-                    }
-                    break;
-                case PlayerState.FLOOR_CLOCKWISE:
-                    // print("FLOOR_CLOCKWISE");
-                    moveSpeed = 0;
-                    animator.Play("player_gapFloorToCeilingClockwise");
-                    LevelManager.Instance.SetGravity(LevelManager.GravityDirection.UP);
-                    if (OnPlayerDirectionChange != null) {
-                        OnPlayerDirectionChange();
-                    }
-                    break;
-                case PlayerState.CEILING_ANTI:
-                    // print("CEILING_ANTI");
-                    moveSpeed = 0;
-                    animator.Play("player_gapCeilingToFloorAntiClockwise");
-                    LevelManager.Instance.SetGravity(LevelManager.GravityDirection.DOWN);
-                    if (OnPlayerDirectionChange != null) {
-                        OnPlayerDirectionChange();
-                    }
-                    break;
-                case PlayerState.FALLING:
-                    // print("FALLING");
-                    moveSpeed = 0;
-                    if (LevelManager.Instance.Gravity == LevelManager.GravityDirection.UP) {
-                        if (OnFallingUpGap != null) {
-                            OnFallingUpGap();
+        if (other.CompareTag ("Gap")) {
+            if (isGrounded) {
+                switch (state) {
+                    case PlayerState.CEILING_CLOCKWISE:
+                        // print("CEILING_CLOCKWISE");
+                        moveSpeed = 0;
+                        animator.Play ("player_gapCeilingToFloorClockwise");
+                        LevelManager.Instance.SetGravity (LevelManager.GravityDirection.DOWN);
+                        if (OnPlayerDirectionChange != null) {
+                            OnPlayerDirectionChange ();
                         }
-                    }
-                    else if (LevelManager.Instance.Gravity == LevelManager.GravityDirection.DOWN) {
-                        if (OnFallingDownGap != null) {
-                            OnFallingDownGap();
+                        break;
+                    case PlayerState.FLOOR_ANTI:
+                        //  print("FLOOR_ANTI");
+                        moveSpeed = 0;
+                        animator.Play ("player_gapFloorToCeilingAntiClockwise");
+                        LevelManager.Instance.SetGravity (LevelManager.GravityDirection.UP);
+                        if (OnPlayerDirectionChange != null) {
+                            OnPlayerDirectionChange ();
                         }
+                        break;
+                    case PlayerState.FLOOR_CLOCKWISE:
+                        // print("FLOOR_CLOCKWISE");
+                        moveSpeed = 0;
+                        animator.Play ("player_gapFloorToCeilingClockwise");
+                        LevelManager.Instance.SetGravity (LevelManager.GravityDirection.UP);
+                        if (OnPlayerDirectionChange != null) {
+                            OnPlayerDirectionChange ();
+                        }
+                        break;
+                    case PlayerState.CEILING_ANTI:
+                        // print("CEILING_ANTI");
+                        moveSpeed = 0;
+                        animator.Play ("player_gapCeilingToFloorAntiClockwise");
+                        LevelManager.Instance.SetGravity (LevelManager.GravityDirection.DOWN);
+                        if (OnPlayerDirectionChange != null) {
+                            OnPlayerDirectionChange ();
+                        }
+                        break;
+                }
+            }
+            else {
+                // print("FALLING");
+                moveSpeed = 0;
+                if (LevelManager.Instance.Gravity == LevelManager.GravityDirection.UP) {
+                    if (OnFallingUpGap != null) {
+                        OnFallingUpGap ();
                     }
-                    break;
+                }
+                else if (LevelManager.Instance.Gravity == LevelManager.GravityDirection.DOWN) {
+                    if (OnFallingDownGap != null) {
+                        OnFallingDownGap ();
+                    }
+                }
             }
 
             if (OnPlayerGrounded != null) {
-                OnPlayerGrounded(false);
+                OnPlayerGrounded (false);
+            }
+
+            return;
+        }
+
+        if (other.CompareTag ("Level")) {
+            isGrounded = true;
+            switch (state) {
+                case PlayerState.CEILING_CLOCKWISE:
+                    // print("CEILING_CLOCKWISE");
+                    animator.Play ("player_moveFloorClockwise");
+                    break;
+                case PlayerState.FLOOR_ANTI:
+                    //  print("FLOOR_ANTI");
+                    animator.Play ("player_moveCeilingAntiClockwise");
+                    break;
+                case PlayerState.FLOOR_CLOCKWISE:
+                    // print("FLOOR_CLOCKWISE");
+                    animator.Play ("player_moveCeilingClockwise");
+                    break;
+                case PlayerState.CEILING_ANTI:
+                    // print("CEILING_ANTI");
+                    animator.Play ("player_moveFloorAntiClockwise");
+                    break;
             }
         }
 
-        if (other.CompareTag("Collectable")) {
-            Destroy(other.transform.parent.gameObject);
-            Collect();
+        if (other.CompareTag ("Collectable")) {
+            Destroy (other.transform.parent.gameObject);
+            Collect ();
         }
 
-        if (other.CompareTag("Enemy")) {
-            Die();
+        if (other.CompareTag ("Enemy")) {
+            Die ();
         }
     }
 
@@ -156,39 +186,41 @@ public class Player : MonoBehaviour {
     }
 
     public void SetMoveSpeed (int direction) {
-        moveSpeed = Math.Abs(previousMoveSpeed) * direction;
+        moveSpeed = Math.Abs (previousMoveSpeed) * direction;
     }
 
     public void CeilingToFloor () {
+        isGrounded = false;
+        moveSpeed = 0;
+        
         if (OnPlayerGrounded != null) {
-            OnPlayerGrounded(false);
+            OnPlayerGrounded (isGrounded);
         }
 
         switch (state) {
             case PlayerState.CEILING_CLOCKWISE:
-                SetPlayerState(4);
-                animator.Play("player_ceilingToFloorClockwise");
+                animator.Play ("player_ceilingToFloorClockwise");
                 break;
             case PlayerState.CEILING_ANTI:
-                SetPlayerState(4);
-                animator.Play("player_ceilingToFloorAntiClockwise");
+                animator.Play ("player_ceilingToFloorAntiClockwise");
                 break;
         }
     }
 
     public void FloorToCeiling () {
+        isGrounded = false;
+        moveSpeed = 0;
+        
         if (OnPlayerGrounded != null) {
-            OnPlayerGrounded(false);
+            OnPlayerGrounded (isGrounded);
         }
 
         switch (state) {
             case PlayerState.FLOOR_CLOCKWISE:
-                SetPlayerState(4);
-                animator.Play("player_floorToCeilingClockwise");
+                animator.Play ("player_floorToCeilingClockwise");
                 break;
             case PlayerState.FLOOR_ANTI:
-                SetPlayerState(4);
-                animator.Play("player_floorToCeilingAntiClockwise");
+                animator.Play ("player_floorToCeilingAntiClockwise");
                 break;
         }
     }
@@ -199,41 +231,41 @@ public class Player : MonoBehaviour {
 
     public void PlayerGrounded () {
         if (OnPlayerGrounded != null) {
-            OnPlayerGrounded(true);
+            OnPlayerGrounded (true);
         }
     }
 
     public void ChangeDirection () {
         switch (state) {
             case PlayerState.CEILING_CLOCKWISE:
-                SetPlayerState(1);
-                animator.Play("player_moveCeilingAntiClockwise");
+                SetPlayerState (1);
+                animator.Play ("player_moveCeilingAntiClockwise");
                 break;
             case PlayerState.CEILING_ANTI:
-                SetPlayerState(0);
-                animator.Play("player_moveCeilingClockwise");
+                SetPlayerState (0);
+                animator.Play ("player_moveCeilingClockwise");
                 break;
             case PlayerState.FLOOR_CLOCKWISE:
-                SetPlayerState(3);
-                animator.Play("player_moveFloorAntiClockwise");
+                SetPlayerState (3);
+                animator.Play ("player_moveFloorAntiClockwise");
                 break;
             case PlayerState.FLOOR_ANTI:
-                SetPlayerState(2);
-                animator.Play("player_moveFloorClockwise");
+                SetPlayerState (2);
+                animator.Play ("player_moveFloorClockwise");
                 break;
         }
 
         if (OnPlayerDirectionChange != null) {
-            OnPlayerDirectionChange();
+            OnPlayerDirectionChange ();
         }
     }
 
     public void Die () {
-        LevelManager.Instance.RestartGame();
+        LevelManager.Instance.RestartGame ();
     }
 
     void Collect () {
-        LevelManager.Instance.AddCollectable();
+        LevelManager.Instance.AddCollectable ();
     }
 
     #endregion

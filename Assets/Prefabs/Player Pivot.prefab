@@ -140,6 +140,7 @@ MonoBehaviour:
   playerPivot: {fileID: 4882057262774968}
   animator: {fileID: 95849821497360464}
   moveSpeed: -50
+  isGrounded: 1
   state: 0
 --- !u!212 &212116942858099152
 SpriteRenderer:
