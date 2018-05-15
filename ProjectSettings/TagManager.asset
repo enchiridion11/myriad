@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Gap
   - Enemy
+  - Collectable
   layers:
   - Default
   - TransparentFX

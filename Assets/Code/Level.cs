@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -93,9 +94,9 @@ public class Level : MonoBehaviour {
             go.name = "Gap " + (i + 1);
 
             // set random rotation
-            var euler = go.transform.eulerAngles;
-            euler.z = newRotation;
-            go.transform.eulerAngles = euler;
+            var eulerVector = go.transform.eulerAngles;
+            eulerVector.z = Math.Abs(newRotation);
+            go.transform.localRotation = Quaternion.Euler(eulerVector);
         }
     }
 
@@ -140,8 +141,10 @@ public class Level : MonoBehaviour {
     }
 
     int GetRandomGapRoation (List<int> rotations) {
-        var rotation = Random.Range(rotations[0], rotations.Count) * 45;
-        rotations.Remove(rotation);
+        var multiple = Random.Range(rotations[0], rotations.Count);
+        var angle = 45;
+        var rotation = multiple * angle;
+        rotations.Remove(multiple);
         return rotation;
     }
 

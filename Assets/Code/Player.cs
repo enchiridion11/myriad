@@ -19,6 +19,8 @@ public class Player : MonoBehaviour {
     [SerializeField]
     playerState state;
 
+    int previousMoveSpeed;
+
     enum playerState {
         CEILING_CLOCKWISE, // 0
         CEILING_ANTI, // 1
@@ -47,6 +49,8 @@ public class Player : MonoBehaviour {
 
     public Action OnFallingUpGap;
 
+    public Action OnPlayerDirectionChange;
+
     #endregion
 
     #region Methods
@@ -55,6 +59,7 @@ public class Player : MonoBehaviour {
 
     void Awake () {
         instance = this;
+        previousMoveSpeed = moveSpeed;
     }
 
     void Update () {
@@ -65,6 +70,7 @@ public class Player : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.W)) {
             FloorToCeiling();
         }
+
         MovePlayer();
     }
 
@@ -72,26 +78,43 @@ public class Player : MonoBehaviour {
         if (enter.CompareTag("Gap")) {
             switch (state) {
                 case playerState.CEILING_CLOCKWISE:
+                    // print("CEILING_CLOCKWISE");
                     moveSpeed = 0;
                     animator.Play("player_gapCeilingToFloorClockwise");
                     LevelManager.Instance.SetGravity(LevelManager.GravityDirection.DOWN);
+                    if (OnPlayerDirectionChange != null) {
+                        OnPlayerDirectionChange();
+                    }
                     break;
                 case playerState.FLOOR_ANTI:
+                    //  print("FLOOR_ANTI");
                     moveSpeed = 0;
                     animator.Play("player_gapFloorToCeilingAntiClockwise");
                     LevelManager.Instance.SetGravity(LevelManager.GravityDirection.UP);
+                    if (OnPlayerDirectionChange != null) {
+                        OnPlayerDirectionChange();
+                    }
                     break;
                 case playerState.FLOOR_CLOCKWISE:
+                    // print("FLOOR_CLOCKWISE");
                     moveSpeed = 0;
                     animator.Play("player_gapFloorToCeilingClockwise");
                     LevelManager.Instance.SetGravity(LevelManager.GravityDirection.UP);
+                    if (OnPlayerDirectionChange != null) {
+                        OnPlayerDirectionChange();
+                    }
                     break;
                 case playerState.CEILING_ANTI:
+                    // print("CEILING_ANTI");
                     moveSpeed = 0;
                     animator.Play("player_gapCeilingToFloorAntiClockwise");
                     LevelManager.Instance.SetGravity(LevelManager.GravityDirection.DOWN);
+                    if (OnPlayerDirectionChange != null) {
+                        OnPlayerDirectionChange();
+                    }
                     break;
                 case playerState.FALLING:
+                    print("FALLING");
                     moveSpeed = 0;
                     if (LevelManager.Instance.Gravity == LevelManager.GravityDirection.UP) {
                         if (OnFallingUpGap != null) {
@@ -125,7 +148,7 @@ public class Player : MonoBehaviour {
     }
 
     public void SetMoveSpeed (int direction) {
-        moveSpeed = direction;
+        moveSpeed = Math.Abs(previousMoveSpeed) * direction;
     }
 
     public void CeilingToFloor () {
@@ -164,8 +187,33 @@ public class Player : MonoBehaviour {
         }
     }
 
+    public void ChangeDirection () {
+        switch (state) {
+            case playerState.CEILING_CLOCKWISE:
+                SetPlayerState(1);
+                animator.Play("player_moveCeilingAntiClockwise");
+                break;
+            case playerState.CEILING_ANTI:
+                SetPlayerState(0);
+                animator.Play("player_moveCeilingClockwise");
+                break;
+            case playerState.FLOOR_CLOCKWISE:
+                SetPlayerState(3);
+                animator.Play("player_moveFloorAntiClockwise");
+                break;
+            case playerState.FLOOR_ANTI:
+                SetPlayerState(2);
+                animator.Play("player_moveFloorClockwise");
+                break;
+        }
+
+        if (OnPlayerDirectionChange != null) {
+            OnPlayerDirectionChange();
+        }
+    }
+
     public void Die () {
-        SceneManager.LoadScene("Game");
+        LevelManager.Instance.RestartGame();
     }
 
     #endregion

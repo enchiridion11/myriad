@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Experimental.PlayerLoop;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class LevelManager : MonoBehaviour {
@@ -43,6 +43,9 @@ public class LevelManager : MonoBehaviour {
 
     [SerializeField]
     Text levelText;
+    
+    [SerializeField]
+    Text bestText;
 
     [SerializeField]
     Button gravityButton;
@@ -144,6 +147,7 @@ public class LevelManager : MonoBehaviour {
 
         offsetText.text = offset.ToString();
         levelText.text = currentLevel.ToString();
+        bestText.text = PlayerPrefs.GetInt("HighScore").ToString();
     }
 
     public void ScaleLevelsDown () {
@@ -304,6 +308,19 @@ public class LevelManager : MonoBehaviour {
 
     void SetGravityButton (bool isGrounded) {
         gravityButton.interactable = isGrounded;
+    }
+    
+    public void ChangeDirection () {
+        Player.Instance.ChangeDirection();
+    }
+    
+    public void RestartGame () {
+        PlayerPrefs.SetInt("HighScore", currentLevel);
+        SceneManager.LoadScene("Game");
+    }
+
+    void OnApplicationQuit () {
+        PlayerPrefs.SetInt("HighScore", currentLevel);
     }
 
     #endregion
