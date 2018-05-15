@@ -124,8 +124,8 @@ public class Player : MonoBehaviour {
         playerPivot.eulerAngles = euler;
     }
 
-    public void SetMoveSpeed (int speed) {
-        moveSpeed = speed;
+    public void SetMoveSpeed (int direction) {
+        moveSpeed = direction;
     }
 
     public void CeilingToFloor () {
