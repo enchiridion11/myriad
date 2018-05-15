@@ -15,13 +15,16 @@ public class Player : MonoBehaviour {
 
     [SerializeField]
     int moveSpeed;
+    
+    [SerializeField]
+    bool isGrounded;
 
     [SerializeField]
-    playerState state;
+    PlayerState state;
 
     int previousMoveSpeed;
 
-    enum playerState {
+    enum PlayerState {
         CEILING_CLOCKWISE, // 0
         CEILING_ANTI, // 1
         FLOOR_CLOCKWISE, // 2
@@ -77,7 +80,7 @@ public class Player : MonoBehaviour {
     void OnTriggerEnter2D (Collider2D other) {
         if (other.CompareTag("Gap")) {
             switch (state) {
-                case playerState.CEILING_CLOCKWISE:
+                case PlayerState.CEILING_CLOCKWISE:
                     // print("CEILING_CLOCKWISE");
                     moveSpeed = 0;
                     animator.Play("player_gapCeilingToFloorClockwise");
@@ -86,7 +89,7 @@ public class Player : MonoBehaviour {
                         OnPlayerDirectionChange();
                     }
                     break;
-                case playerState.FLOOR_ANTI:
+                case PlayerState.FLOOR_ANTI:
                     //  print("FLOOR_ANTI");
                     moveSpeed = 0;
                     animator.Play("player_gapFloorToCeilingAntiClockwise");
@@ -95,7 +98,7 @@ public class Player : MonoBehaviour {
                         OnPlayerDirectionChange();
                     }
                     break;
-                case playerState.FLOOR_CLOCKWISE:
+                case PlayerState.FLOOR_CLOCKWISE:
                     // print("FLOOR_CLOCKWISE");
                     moveSpeed = 0;
                     animator.Play("player_gapFloorToCeilingClockwise");
@@ -104,7 +107,7 @@ public class Player : MonoBehaviour {
                         OnPlayerDirectionChange();
                     }
                     break;
-                case playerState.CEILING_ANTI:
+                case PlayerState.CEILING_ANTI:
                     // print("CEILING_ANTI");
                     moveSpeed = 0;
                     animator.Play("player_gapCeilingToFloorAntiClockwise");
@@ -113,7 +116,7 @@ public class Player : MonoBehaviour {
                         OnPlayerDirectionChange();
                     }
                     break;
-                case playerState.FALLING:
+                case PlayerState.FALLING:
                     // print("FALLING");
                     moveSpeed = 0;
                     if (LevelManager.Instance.Gravity == LevelManager.GravityDirection.UP) {
@@ -162,11 +165,11 @@ public class Player : MonoBehaviour {
         }
 
         switch (state) {
-            case playerState.CEILING_CLOCKWISE:
+            case PlayerState.CEILING_CLOCKWISE:
                 SetPlayerState(4);
                 animator.Play("player_ceilingToFloorClockwise");
                 break;
-            case playerState.CEILING_ANTI:
+            case PlayerState.CEILING_ANTI:
                 SetPlayerState(4);
                 animator.Play("player_ceilingToFloorAntiClockwise");
                 break;
@@ -179,11 +182,11 @@ public class Player : MonoBehaviour {
         }
 
         switch (state) {
-            case playerState.FLOOR_CLOCKWISE:
+            case PlayerState.FLOOR_CLOCKWISE:
                 SetPlayerState(4);
                 animator.Play("player_floorToCeilingClockwise");
                 break;
-            case playerState.FLOOR_ANTI:
+            case PlayerState.FLOOR_ANTI:
                 SetPlayerState(4);
                 animator.Play("player_floorToCeilingAntiClockwise");
                 break;
@@ -191,7 +194,7 @@ public class Player : MonoBehaviour {
     }
 
     public void SetPlayerState (int index) {
-        state = (playerState) index;
+        state = (PlayerState) index;
     }
 
     public void PlayerGrounded () {
@@ -202,19 +205,19 @@ public class Player : MonoBehaviour {
 
     public void ChangeDirection () {
         switch (state) {
-            case playerState.CEILING_CLOCKWISE:
+            case PlayerState.CEILING_CLOCKWISE:
                 SetPlayerState(1);
                 animator.Play("player_moveCeilingAntiClockwise");
                 break;
-            case playerState.CEILING_ANTI:
+            case PlayerState.CEILING_ANTI:
                 SetPlayerState(0);
                 animator.Play("player_moveCeilingClockwise");
                 break;
-            case playerState.FLOOR_CLOCKWISE:
+            case PlayerState.FLOOR_CLOCKWISE:
                 SetPlayerState(3);
                 animator.Play("player_moveFloorAntiClockwise");
                 break;
-            case playerState.FLOOR_ANTI:
+            case PlayerState.FLOOR_ANTI:
                 SetPlayerState(2);
                 animator.Play("player_moveFloorClockwise");
                 break;

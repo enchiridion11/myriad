@@ -1260,6 +1260,7 @@ MonoBehaviour:
   coinsText: {fileID: 1420048162}
   gravityButton: {fileID: 2085620129}
   directionButton: {fileID: 863828610}
+  controlsOverlay: {fileID: 2127680559}
 --- !u!4 &290664586
 Transform:
   m_ObjectHideFlags: 0
@@ -1896,7 +1897,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: tap here (or spacebarl) to switch gravity
+  m_Text: tap here (or spacebar) to switch gravity
 --- !u!222 &565447461
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -4308,9 +4309,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2127680559}
-        m_MethodName: SetActive
-        m_Mode: 6
+      - m_Target: {fileID: 290664585}
+        m_MethodName: HideControlsOverlay
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine

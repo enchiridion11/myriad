@@ -242,6 +242,13 @@ AnimationClip:
   m_GenerateMotionCurves: 0
   m_Events:
   - time: 0
+    functionName: SetPlayerState
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 3
+    messageOptions: 0
+  - time: 0
     functionName: PlayerGrounded
     data: 
     objectReferenceParameter: {fileID: 0}
@@ -254,11 +261,4 @@ AnimationClip:
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 1
-    messageOptions: 0
-  - time: 0
-    functionName: SetPlayerState
-    data: 
-    objectReferenceParameter: {fileID: 0}
-    floatParameter: 0
-    intParameter: 3
     messageOptions: 0

@@ -53,9 +53,14 @@ public class LevelManager : MonoBehaviour {
     [SerializeField]
     Button directionButton;
 
+    [SerializeField]
+    GameObject controlsOverlay;
+
     Transform levelToHide;
 
     int coins;
+
+    bool canUseKeyboard;
 
     public enum GravityDirection {
         UP,
@@ -118,11 +123,24 @@ public class LevelManager : MonoBehaviour {
 
     void Update () {
         if (Input.GetKeyDown (KeyCode.LeftControl)) {
-            ChangeDirection ();
+            if (controlsOverlay.activeInHierarchy) {
+                HideControlsOverlay ();
+                return;
+            }
+
+            if (canUseKeyboard) {
+                ChangeDirection ();
+            }
         }
 
-        if (Input.GetKeyDown (KeyCode.DownArrow)) {
-            SwitchGravity ();
+        if (Input.GetKeyDown (KeyCode.Space)) {
+            if (controlsOverlay.activeInHierarchy) {
+                HideControlsOverlay ();
+                return;
+            }
+            if (canUseKeyboard) {
+                SwitchGravity ();
+            }
         }
     }
 
@@ -311,6 +329,7 @@ public class LevelManager : MonoBehaviour {
     void SetGravityButton (bool isGrounded) {
         gravityButton.interactable = isGrounded;
         directionButton.interactable = isGrounded;
+        canUseKeyboard = isGrounded;
     }
 
     public void ChangeDirection () {
@@ -320,6 +339,10 @@ public class LevelManager : MonoBehaviour {
     public void AddCollectable () {
         coins++;
         coinsText.text = coins.ToString ();
+    }
+
+    public void HideControlsOverlay () {
+        controlsOverlay.SetActive (false);
     }
 
     public void RestartGame () {
