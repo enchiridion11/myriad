@@ -74,8 +74,8 @@ public class Player : MonoBehaviour {
         MovePlayer();
     }
 
-    void OnTriggerEnter2D (Collider2D enter) {
-        if (enter.CompareTag("Gap")) {
+    void OnTriggerEnter2D (Collider2D other) {
+        if (other.CompareTag("Gap")) {
             switch (state) {
                 case playerState.CEILING_CLOCKWISE:
                     // print("CEILING_CLOCKWISE");
@@ -114,7 +114,7 @@ public class Player : MonoBehaviour {
                     }
                     break;
                 case playerState.FALLING:
-                    print("FALLING");
+                    // print("FALLING");
                     moveSpeed = 0;
                     if (LevelManager.Instance.Gravity == LevelManager.GravityDirection.UP) {
                         if (OnFallingUpGap != null) {
@@ -134,7 +134,12 @@ public class Player : MonoBehaviour {
             }
         }
 
-        if (enter.CompareTag("Enemy")) {
+        if (other.CompareTag("Collectable")) {
+            Destroy(other.transform.parent.gameObject);
+            Collect();
+        }
+
+        if (other.CompareTag("Enemy")) {
             Die();
         }
     }
@@ -152,6 +157,10 @@ public class Player : MonoBehaviour {
     }
 
     public void CeilingToFloor () {
+        if (OnPlayerGrounded != null) {
+            OnPlayerGrounded(false);
+        }
+
         switch (state) {
             case playerState.CEILING_CLOCKWISE:
                 SetPlayerState(4);
@@ -165,6 +174,10 @@ public class Player : MonoBehaviour {
     }
 
     public void FloorToCeiling () {
+        if (OnPlayerGrounded != null) {
+            OnPlayerGrounded(false);
+        }
+
         switch (state) {
             case playerState.FLOOR_CLOCKWISE:
                 SetPlayerState(4);
@@ -214,6 +227,10 @@ public class Player : MonoBehaviour {
 
     public void Die () {
         LevelManager.Instance.RestartGame();
+    }
+
+    void Collect () {
+        LevelManager.Instance.AddCollectable();
     }
 
     #endregion

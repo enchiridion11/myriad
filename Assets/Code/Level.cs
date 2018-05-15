@@ -20,6 +20,12 @@ public class Level : MonoBehaviour {
 
     [SerializeField]
     Transform gapParent;
+    
+    [Header("Collectables"), SerializeField]
+    GameObject collectablePrefab;
+
+    [SerializeField]
+    Transform collectableParent;
 
     LevelManager levelManager;
 
@@ -46,6 +52,7 @@ public class Level : MonoBehaviour {
         spriteRenderer.color = GetLevelColor();
 
         CreateGaps();
+        CreateCollectables();
         CreateEnemies();
 
         // set random rotation
@@ -97,6 +104,38 @@ public class Level : MonoBehaviour {
             var eulerVector = go.transform.eulerAngles;
             eulerVector.z = Math.Abs(newRotation);
             go.transform.localRotation = Quaternion.Euler(eulerVector);
+        }
+    }
+    
+    void CreateCollectables () {
+        // don't create collectables if it's the first level
+        if (levelManager.Levels.Count == 0) {
+            return;
+        }
+
+        // get random amount of collectables to spawn
+        var amount = Random.Range(3, 10);
+
+        for (var i = 0; i < amount; i++) {
+            var go = Instantiate(collectablePrefab).GetComponent<Collectable>();
+            go.transform.SetParent(collectableParent);
+            go.transform.localScale = transform.localScale;
+            go.name = "Collectable " + (i + 1);
+
+            // set random rotation
+            var euler = go.transform.eulerAngles;
+            euler.z = Random.Range(0f, 360f);
+            go.transform.eulerAngles = euler;
+
+            // check overlapping
+            var collisions = Physics2D.OverlapCircleAll(go.CollectableTransform.position, go.Collider.radius);
+            var loopSafety = 0;
+            while (collisions.Length > 1 && loopSafety < 20) {
+                euler.z += 20f;
+                go.transform.eulerAngles = euler;
+                collisions = Physics2D.OverlapCircleAll(go.CollectableTransform.position, go.Collider.radius);
+                loopSafety++;
+            }
         }
     }
 

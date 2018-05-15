@@ -199,6 +199,8 @@ MonoBehaviour:
   enemyParent: {fileID: 0}
   gapPrefab: {fileID: 0}
   gapParent: {fileID: 0}
+  collectablePrefab: {fileID: 0}
+  collectableParent: {fileID: 0}
 --- !u!212 &56252708
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -330,7 +332,7 @@ GameObject:
   - component: {fileID: 93148251}
   - component: {fileID: 93148252}
   m_Layer: 0
-  m_Name: Level Template
+  m_Name: Level Guide
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -354,6 +356,8 @@ MonoBehaviour:
   enemyParent: {fileID: 1747473965}
   gapPrefab: {fileID: 1613400618448798, guid: 97a67008540f0cb44b8787313e51eca0, type: 2}
   gapParent: {fileID: 1722400494}
+  collectablePrefab: {fileID: 0}
+  collectableParent: {fileID: 0}
 --- !u!212 &93148252
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -583,6 +587,8 @@ MonoBehaviour:
   enemyParent: {fileID: 0}
   gapPrefab: {fileID: 0}
   gapParent: {fileID: 0}
+  collectablePrefab: {fileID: 0}
+  collectableParent: {fileID: 0}
 --- !u!212 &154762675
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -753,7 +759,7 @@ RectTransform:
   - {fileID: 1828322444}
   - {fileID: 171490002}
   m_Father: {fileID: 2102344505}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
@@ -878,6 +884,8 @@ MonoBehaviour:
   enemyParent: {fileID: 0}
   gapPrefab: {fileID: 0}
   gapParent: {fileID: 0}
+  collectablePrefab: {fileID: 0}
+  collectableParent: {fileID: 0}
 --- !u!212 &243267155
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1043,6 +1051,8 @@ MonoBehaviour:
   enemyParent: {fileID: 0}
   gapPrefab: {fileID: 0}
   gapParent: {fileID: 0}
+  collectablePrefab: {fileID: 0}
+  collectableParent: {fileID: 0}
 --- !u!212 &277267626
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1134,6 +1144,7 @@ MonoBehaviour:
   offsetText: {fileID: 1002906386}
   levelText: {fileID: 171490004}
   bestText: {fileID: 502874001}
+  coinsText: {fileID: 1420048162}
   gravityButton: {fileID: 2085620129}
 --- !u!4 &290664586
 Transform:
@@ -1288,6 +1299,8 @@ MonoBehaviour:
   enemyParent: {fileID: 0}
   gapPrefab: {fileID: 0}
   gapParent: {fileID: 0}
+  collectablePrefab: {fileID: 0}
+  collectableParent: {fileID: 0}
 --- !u!212 &371470593
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1964,6 +1977,8 @@ MonoBehaviour:
   enemyParent: {fileID: 0}
   gapPrefab: {fileID: 0}
   gapParent: {fileID: 0}
+  collectablePrefab: {fileID: 0}
+  collectableParent: {fileID: 0}
 --- !u!212 &680101968
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -2055,6 +2070,8 @@ MonoBehaviour:
   enemyParent: {fileID: 0}
   gapPrefab: {fileID: 0}
   gapParent: {fileID: 0}
+  collectablePrefab: {fileID: 0}
+  collectableParent: {fileID: 0}
 --- !u!212 &689896007
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -2146,6 +2163,8 @@ MonoBehaviour:
   enemyParent: {fileID: 0}
   gapPrefab: {fileID: 0}
   gapParent: {fileID: 0}
+  collectablePrefab: {fileID: 0}
+  collectableParent: {fileID: 0}
 --- !u!212 &781006112
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -2512,7 +2531,7 @@ RectTransform:
   - {fileID: 257869472}
   - {fileID: 502873999}
   m_Father: {fileID: 2102344505}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
@@ -2606,6 +2625,8 @@ MonoBehaviour:
   enemyParent: {fileID: 0}
   gapPrefab: {fileID: 0}
   gapParent: {fileID: 0}
+  collectablePrefab: {fileID: 0}
+  collectableParent: {fileID: 0}
 --- !u!212 &999021986
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -2775,7 +2796,7 @@ RectTransform:
   m_Children:
   - {fileID: 1649963323}
   m_Father: {fileID: 2102344505}
-  m_RootOrder: 6
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -3120,6 +3141,8 @@ MonoBehaviour:
   enemyParent: {fileID: 0}
   gapPrefab: {fileID: 0}
   gapParent: {fileID: 0}
+  collectablePrefab: {fileID: 0}
+  collectableParent: {fileID: 0}
 --- !u!212 &1318113176
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -3252,7 +3275,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 
+  m_Text: 0
 --- !u!222 &1420048163
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -3586,6 +3609,8 @@ MonoBehaviour:
   enemyParent: {fileID: 0}
   gapPrefab: {fileID: 0}
   gapParent: {fileID: 0}
+  collectablePrefab: {fileID: 0}
+  collectableParent: {fileID: 0}
 --- !u!212 &1631223188
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -3763,7 +3788,7 @@ GameObject:
   - component: {fileID: 1786918346}
   - component: {fileID: 1786918345}
   m_Layer: 0
-  m_Name: Collectables
+  m_Name: Coins
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3996,6 +4021,8 @@ MonoBehaviour:
   enemyParent: {fileID: 0}
   gapPrefab: {fileID: 0}
   gapParent: {fileID: 0}
+  collectablePrefab: {fileID: 0}
+  collectableParent: {fileID: 0}
 --- !u!212 &1957935129
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -4365,9 +4392,9 @@ RectTransform:
   - {fileID: 590327486}
   - {fileID: 2085620128}
   - {fileID: 863828609}
+  - {fileID: 1063113288}
   - {fileID: 190108671}
   - {fileID: 970246545}
-  - {fileID: 1063113288}
   - {fileID: 1786918344}
   m_Father: {fileID: 0}
   m_RootOrder: 4

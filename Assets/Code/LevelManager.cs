@@ -43,14 +43,19 @@ public class LevelManager : MonoBehaviour {
 
     [SerializeField]
     Text levelText;
-    
+
     [SerializeField]
     Text bestText;
+
+    [SerializeField]
+    Text coinsText;
 
     [SerializeField]
     Button gravityButton;
 
     Transform levelToHide;
+
+    int coins;
 
     public enum GravityDirection {
         UP,
@@ -309,11 +314,16 @@ public class LevelManager : MonoBehaviour {
     void SetGravityButton (bool isGrounded) {
         gravityButton.interactable = isGrounded;
     }
-    
+
     public void ChangeDirection () {
         Player.Instance.ChangeDirection();
     }
-    
+
+    public void AddCollectable () {
+        coins++;
+        coinsText.text = coins.ToString();
+    }
+
     public void RestartGame () {
         PlayerPrefs.SetInt("HighScore", currentLevel);
         SceneManager.LoadScene("Game");

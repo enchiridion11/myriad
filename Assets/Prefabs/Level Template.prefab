@@ -28,6 +28,21 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &1251382965368116
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4827598158187496}
+  m_Layer: 0
+  m_Name: Enemies
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &1534290749533014
 GameObject:
   m_ObjectHideFlags: 0
@@ -37,7 +52,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4835201413211024}
   m_Layer: 0
-  m_Name: Enemies
+  m_Name: Collectables
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -69,9 +84,23 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4891757855326794}
+  - {fileID: 4827598158187496}
   - {fileID: 4835201413211024}
   m_Father: {fileID: 0}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4827598158187496
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1251382965368116}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4624616002050102}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4835201413211024
 Transform:
@@ -84,7 +113,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4624616002050102}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4891757855326794
 Transform:
@@ -113,9 +142,12 @@ MonoBehaviour:
   spriteRenderer: {fileID: 212152074261733414}
   enemyPrefab: {fileID: 1003283514309560, guid: 5c297be3d7848bd4e8948012619618cc,
     type: 2}
-  enemyParent: {fileID: 4835201413211024}
+  enemyParent: {fileID: 4827598158187496}
   gapPrefab: {fileID: 1613400618448798, guid: 97a67008540f0cb44b8787313e51eca0, type: 2}
   gapParent: {fileID: 4891757855326794}
+  collectablePrefab: {fileID: 1413844301162658, guid: b195ac8e13d436c4b9f2134d03c9dec5,
+    type: 2}
+  collectableParent: {fileID: 4835201413211024}
 --- !u!212 &212152074261733414
 SpriteRenderer:
   m_ObjectHideFlags: 1
