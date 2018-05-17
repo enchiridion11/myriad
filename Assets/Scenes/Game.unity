@@ -1204,6 +1204,7 @@ MonoBehaviour:
   scaleRatio: 0.7
   scaleSpeed: 0.3
   currentLevel: 1
+  levelSpeedAmount: 1
   gravity: 0
   levelPool: {fileID: 535574185}
   levelPrefab: {fileID: 1204415180888418, guid: 4c4dc7c618d871040aedfc84cdab9bd4,
@@ -1587,7 +1588,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 87d1d3ec57a8bb94ca81200239f1215b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rotateSpeed: 0
+  rotateSpeed: -10
 --- !u!20 &519420031
 Camera:
   m_ObjectHideFlags: 0

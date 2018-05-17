@@ -64,6 +64,10 @@ public class Player : MonoBehaviour {
 
     #region Unity
 
+    void OnEnable () {
+        LevelManager.Instance.OnLevelChange += ChangeMoveSpeed;
+    }
+    
     void Awake () {
         instance = this;
         previousMoveSpeed = moveSpeed;
@@ -177,6 +181,10 @@ public class Player : MonoBehaviour {
         }
     }
 
+    void OnDisable () {
+        LevelManager.Instance.OnLevelChange -= ChangeMoveSpeed;
+    }
+
     #endregion
 
     void MovePlayer () {
@@ -185,8 +193,13 @@ public class Player : MonoBehaviour {
         playerPivot.eulerAngles = euler;
     }
 
+    // TODO: rename to SetDirection
     public void SetMoveSpeed (int direction) {
         moveSpeed = Math.Abs (previousMoveSpeed) * direction;
+    }
+
+    void ChangeMoveSpeed (int amount) {
+        previousMoveSpeed -= amount;
     }
 
     public void CeilingToFloor () {

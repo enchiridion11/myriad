@@ -25,6 +25,9 @@ public class LevelManager : MonoBehaviour {
 
     [SerializeField]
     int currentLevel = 1;
+    
+    [SerializeField]
+    int levelSpeedAmount;
 
     [SerializeField]
     GravityDirection gravity;
@@ -55,8 +58,6 @@ public class LevelManager : MonoBehaviour {
 
     [SerializeField]
     GameObject controlsOverlay;
-
-    Transform levelToHide;
 
     int coins;
 
@@ -102,6 +103,8 @@ public class LevelManager : MonoBehaviour {
     #endregion
 
     #region Events
+
+    public Action<int> OnLevelChange;
 
     #endregion
 
@@ -221,6 +224,9 @@ public class LevelManager : MonoBehaviour {
 
         offset++;
         currentLevel--;
+        if (OnLevelChange != null) {
+            OnLevelChange (-levelSpeedAmount);
+        }
         levelText.text = currentLevel.ToString ();
     }
 
@@ -275,16 +281,13 @@ public class LevelManager : MonoBehaviour {
                 // StartCoroutine (AnimateScaleUp (levels[i], levels[i].localScale.x, newScale));
                 AnimateScaleUp (levels[i], new Vector3 (newScale, newScale, newScale));
             }
-
-            // if a level at the start goes out of bounds, add to the pool
-            if (Math.Abs (offset) <= 0) {
-                levelToHide = levels[Math.Abs (offset)];
-                // print (levelToHide.name);
-            }
         }
 
         offset--;
         currentLevel++;
+        if (OnLevelChange != null) {
+            OnLevelChange (levelSpeedAmount);
+        }
         levelText.text = currentLevel.ToString ();
     }
 
