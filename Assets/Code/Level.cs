@@ -91,7 +91,7 @@ public class Level : MonoBehaviour {
         }
 
         // get random amount of gaps to spawn
-        var amount = Random.Range (2, 5);
+        var amount = Random.Range (2, 6);
 
         var unusedRotations = GetGapRoationList ();
 
@@ -168,7 +168,6 @@ public class Level : MonoBehaviour {
             // check overlapping
             var collisions = Physics2D.OverlapCircleAll (go.EnemyTransform.position, go.Collider.radius);
             var loopSafety = 0;
-            print (collisions.Length);
             while (collisions.Length > 1 && loopSafety < 20) {
                 euler.z += 10f;
                 go.gameObject.SetActive (false);

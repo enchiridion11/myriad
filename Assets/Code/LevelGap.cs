@@ -32,16 +32,6 @@ public class LevelGap : MonoBehaviour {
         }
     }
 
-    void OnTriggerExit2D (Collider2D other) {
-        if (other.CompareTag ("Player")) {
-            if (!Player.Instance.IsGrounded) {
-                if (OnPlayerColliding != null) {
-                    OnPlayerColliding (true);
-                }
-            }
-        }
-    }
-
     #endregion
 
     #endregion

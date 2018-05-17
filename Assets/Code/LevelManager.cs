@@ -180,7 +180,7 @@ public class LevelManager : MonoBehaviour {
 
         // if offset is positive or zero
         if (offset >= 0) {
-            SetLevelColliders();
+            SetLevelColliders(false);
             StopAllCoroutines();
 
             // scale levels down
@@ -197,7 +197,7 @@ public class LevelManager : MonoBehaviour {
 
         // if offset is negative
         else if (offset < 0) {
-            SetLevelColliders();
+            SetLevelColliders(false);
             StopAllCoroutines();
 
             // scale levels down
@@ -233,7 +233,7 @@ public class LevelManager : MonoBehaviour {
                 CreateNewLevel();
             }
 
-            SetLevelColliders();
+            SetLevelColliders(true);
             StopAllCoroutines();
 
             // scale levels up
@@ -260,7 +260,7 @@ public class LevelManager : MonoBehaviour {
                 CreateNewLevel();
             }
 
-            SetLevelColliders();
+            SetLevelColliders(true);
             StopAllCoroutines();
 
             // scale levels up
@@ -305,8 +305,13 @@ public class LevelManager : MonoBehaviour {
         // only hide the level once it's done animating
         if (level == levelToHide) {
             levelToHide.GetComponent<Level>().HideLevel();
-            levelToHide = null;
         }
+
+        /* if (currentLevel > 3) {
+             if (currentLevel - 4 > levels.Count - 1 - maxLevels - 1) {
+                 level.GetComponent<Level>().HideLevel();
+             }
+         }*/
     }
 
     void CreateNewLevel () {
@@ -315,21 +320,21 @@ public class LevelManager : MonoBehaviour {
         go.Initialize();
         go.name = "Level " + levels.Count;
 
-        var newScale = (float) Math.Pow(scaleRatio, maxLevels + 2);
+        var newScale = (float) Math.Pow(scaleRatio, maxLevels - 1);
         go.transform.localScale = new Vector2(newScale, newScale);
 
         levels.Add(go.transform);
     }
 
-    void SetLevelColliders () {
-        if (gravity == GravityDirection.UP) {
+    void SetLevelColliders (bool isScalingUp) {
+        if (isScalingUp) {
             // enable next level collider
             levels[currentLevel].GetComponent<Level>().SetCollider(true);
 
             // disable current level collider
             levels[currentLevel - 1].GetComponent<Level>().SetCollider(false);
         }
-        else if (gravity == GravityDirection.DOWN) {
+        else {
             // enable next level collider
             levels[currentLevel - 2].GetComponent<Level>().SetCollider(true);
 
