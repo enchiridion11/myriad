@@ -62,10 +62,6 @@ public class Level : MonoBehaviour {
         var euler = transform.eulerAngles;
         euler.z = Random.Range (0f, 360f);
         transform.eulerAngles = euler;
-
-        if (levelManager.Levels.Count > 0) {
-            collider.enabled = true;
-        }
     }
 
     public void ShowLevel () {

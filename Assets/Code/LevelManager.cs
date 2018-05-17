@@ -8,7 +8,7 @@ using UnityEngine.UI;
 public class LevelManager : MonoBehaviour {
     #region Fields 
 
-    [Header ("Settings"), SerializeField]
+    [Header("Settings"), SerializeField]
     int totalLevels;
 
     [SerializeField]
@@ -29,16 +29,16 @@ public class LevelManager : MonoBehaviour {
     [SerializeField]
     GravityDirection gravity;
 
-    [Header ("Game Objects"), SerializeField]
+    [Header("Game Objects"), SerializeField]
     Transform levelPool;
 
     [SerializeField]
     GameObject levelPrefab;
 
-    [Header ("Other"), SerializeField]
+    [Header("Other"), SerializeField]
     Color[] levelColors;
 
-    [Header ("UI"), SerializeField]
+    [Header("UI"), SerializeField]
     Text levelText;
 
     [SerializeField]
@@ -117,29 +117,29 @@ public class LevelManager : MonoBehaviour {
 
     void Awake () {
         instance = this;
-        Initialize ();
+        Initialize();
     }
 
 
     void Update () {
-        if (Input.GetKeyDown (KeyCode.LeftControl)) {
+        if (Input.GetKeyDown(KeyCode.LeftControl)) {
             if (controlsOverlay.activeInHierarchy) {
-                HideControlsOverlay ();
+                HideControlsOverlay();
                 return;
             }
 
             if (canUseKeyboard) {
-                ChangeDirection ();
+                ChangeDirection();
             }
         }
 
-        if (Input.GetKeyDown (KeyCode.Space)) {
+        if (Input.GetKeyDown(KeyCode.Space)) {
             if (controlsOverlay.activeInHierarchy) {
-                HideControlsOverlay ();
+                HideControlsOverlay();
                 return;
             }
             if (canUseKeyboard) {
-                SwitchGravity ();
+                SwitchGravity();
             }
         }
     }
@@ -153,23 +153,23 @@ public class LevelManager : MonoBehaviour {
     #endregion
 
     void Initialize () {
-        levels = new List<Transform> (totalLevels);
+        levels = new List<Transform>(totalLevels);
 
         for (var i = 0; i < totalLevels; i++) {
-            var go = Instantiate (levelPrefab).GetComponent<Level> ();
-            go.transform.SetParent (transform);
-            go.Initialize ();
+            var go = Instantiate(levelPrefab).GetComponent<Level>();
+            go.transform.SetParent(transform);
+            go.Initialize();
 
-            var newScale = (float) Math.Pow (scaleRatio, i - 1 + offset);
-            go.transform.localScale = new Vector2 (newScale, newScale);
+            var newScale = (float) Math.Pow(scaleRatio, i - 1 + offset);
+            go.transform.localScale = new Vector2(newScale, newScale);
 
 
             go.name = "Level " + i;
-            levels.Add (go.transform);
+            levels.Add(go.transform);
         }
 
-        levelText.text = currentLevel.ToString ();
-        bestText.text = PlayerPrefs.GetInt ("HighScore").ToString ();
+        levelText.text = currentLevel.ToString();
+        bestText.text = PlayerPrefs.GetInt("HighScore").ToString();
     }
 
     public void ScaleLevelsDown () {
@@ -180,148 +180,174 @@ public class LevelManager : MonoBehaviour {
 
         // if offset is positive or zero
         if (offset >= 0) {
-            // move levels to the right
-            for (var i = 0; i <= maxLevels - Math.Abs (offset) - 1; i++) {
-                var newScale = (float) Math.Pow (scaleRatio, i + offset);
+            SetLevelColliders();
+            StopAllCoroutines();
+
+            // scale levels down
+            for (var i = 0; i <= maxLevels - Math.Abs(offset) - 1; i++) {
+                var newScale = (float) Math.Pow(scaleRatio, i + offset);
                 // levels[i].localScale = new Vector2(newScale, newScale);
-                StartCoroutine (AnimateScaleDown (levels[i], levels[i].localScale.x, newScale));
+                StartCoroutine(AnimateScaleDown(levels[i], levels[i].localScale.x, newScale));
             }
 
-            if (maxLevels - Math.Abs (offset) - 1 >= 0) {
-                levels[maxLevels - Math.Abs (offset) - 1].GetComponent<Level> ().HideLevel ();
+            if (maxLevels - Math.Abs(offset) - 1 >= 0) {
+                levels[maxLevels - Math.Abs(offset) - 1].GetComponent<Level>().HideLevel();
             }
         }
 
         // if offset is negative
         else if (offset < 0) {
-            // move levels to the right
-            for (var i = Math.Abs (offset) - 1; i <= maxLevels + Math.Abs (offset) - 1; i++) {
-                var newScale = (float) Math.Pow (scaleRatio, i + offset);
+            SetLevelColliders();
+            StopAllCoroutines();
+
+            // scale levels down
+            for (var i = Math.Abs(offset) - 1; i <= maxLevels + Math.Abs(offset) - 1; i++) {
+                var newScale = (float) Math.Pow(scaleRatio, i + offset);
                 // levels[i].localScale = new Vector2(newScale, newScale);
-                StartCoroutine (AnimateScaleDown (levels[i], levels[i].localScale.x, newScale));
+                StartCoroutine(AnimateScaleDown(levels[i], levels[i].localScale.x, newScale));
             }
 
             // add level at the end to the pool
-            levels[maxLevels + Math.Abs (offset) - 1].GetComponent<Level> ().HideLevel ();
+            levels[maxLevels + Math.Abs(offset) - 1].GetComponent<Level>().HideLevel();
 
             // if there is a previous level, get it from the pool
-            if (Math.Abs (offset) - 1 <= levels.Count - 1) {
-                levels[Math.Abs (offset) - 1].GetComponent<Level> ().ShowLevel ();
+            if (Math.Abs(offset) - 1 <= levels.Count - 1) {
+                levels[Math.Abs(offset) - 1].GetComponent<Level>().ShowLevel();
             }
         }
 
         offset++;
         currentLevel--;
-        levelText.text = currentLevel.ToString ();
+        levelText.text = currentLevel.ToString();
     }
 
     public void ScaleLevelsUp () {
         // if offset is negative
         if (offset < 0) {
             // if there is another level, get it from pool
-            if (maxLevels + Math.Abs (offset) < levels.Count) {
-                levels[maxLevels + Math.Abs (offset)].GetComponent<Level> ().ShowLevel ();
+            if (maxLevels + Math.Abs(offset) < levels.Count) {
+                levels[maxLevels + Math.Abs(offset)].GetComponent<Level>().ShowLevel();
             }
             // if there are no more levels, create one
             else {
-                CreateNewLevel ();
+                CreateNewLevel();
             }
 
+            SetLevelColliders();
+            StopAllCoroutines();
+
             // scale levels up
-            for (var i = Math.Abs (offset); i <= maxLevels + Math.Abs (offset); i++) {
-                var newScale = (float) Math.Pow (scaleRatio, i - 2 + offset);
+            for (var i = Math.Abs(offset); i <= maxLevels + Math.Abs(offset); i++) {
+                var newScale = (float) Math.Pow(scaleRatio, i - 2 + offset);
                 // levels[i].localScale = new Vector2(newScale, newScale);
-                StartCoroutine (AnimateScaleUp (levels[i], levels[i].localScale.x, newScale));
+                StartCoroutine(AnimateScaleUp(levels[i], levels[i].localScale.x, newScale));
             }
 
             // if a level at the end goes out of bounds, add to the pool
-            if (Math.Abs (offset) <= levels.Count - 1) {
-                levelToHide = levels[Math.Abs (offset)];
+            if (Math.Abs(offset) <= levels.Count - 1) {
+                levelToHide = levels[Math.Abs(offset)];
             }
         }
 
         // if offset is positive or zero
         else if (offset >= 0) {
             // if there is another level at the end, get it from pool
-            if (maxLevels - Math.Abs (offset) < levels.Count) {
-                levels[maxLevels - Math.Abs (offset)].GetComponent<Level> ().ShowLevel ();
+            if (maxLevels - Math.Abs(offset) < levels.Count) {
+                levels[maxLevels - Math.Abs(offset)].GetComponent<Level>().ShowLevel();
             }
             // if there are no more levels at the end, create one
             else {
-                CreateNewLevel ();
+                CreateNewLevel();
             }
 
+            SetLevelColliders();
+            StopAllCoroutines();
+
             // scale levels up
-            for (var i = 0; i <= maxLevels - Math.Abs (offset); i++) {
-                var newScale = (float) Math.Pow (scaleRatio, i - 2 + offset);
+            for (var i = 0; i <= maxLevels - Math.Abs(offset); i++) {
+                var newScale = (float) Math.Pow(scaleRatio, i - 2 + offset);
                 // levels[i].localScale = new Vector2(newScale, newScale);
-                StartCoroutine (AnimateScaleUp (levels[i], levels[i].localScale.x, newScale));
+                StartCoroutine(AnimateScaleUp(levels[i], levels[i].localScale.x, newScale));
             }
 
             // if a level at the start goes out of bounds, add to the pool
-            if (Math.Abs (offset) <= 0) {
-                levelToHide = levels[Math.Abs (offset)];
+            if (Math.Abs(offset) <= 0) {
+                levelToHide = levels[Math.Abs(offset)];
             }
         }
 
         offset--;
         currentLevel++;
-        levelText.text = currentLevel.ToString ();
+        levelText.text = currentLevel.ToString();
     }
 
     public IEnumerator AnimateScaleDown (Transform level, float startValue, float endValue) {
         while (startValue > endValue) {
             startValue -= Time.deltaTime * scaleSpeed * startValue;
-            level.localScale = new Vector2 (startValue, startValue);
+            level.localScale = new Vector2(startValue, startValue);
             yield return null;
         }
 
         // set it to the end value in case precision was lost
-        level.localScale = new Vector2 (endValue, endValue);
+        level.localScale = new Vector2(endValue, endValue);
     }
 
     public IEnumerator AnimateScaleUp (Transform level, float startValue, float endValue) {
         while (startValue < endValue) {
             startValue += Time.deltaTime * scaleSpeed * startValue;
-            level.localScale = new Vector2 (startValue, startValue);
+            level.localScale = new Vector2(startValue, startValue);
             yield return null;
         }
 
         // set it to the end value in case precision was lost
-        level.localScale = new Vector2 (endValue, endValue);
+        level.localScale = new Vector2(endValue, endValue);
 
         // only hide the level once it's done animating
         if (level == levelToHide) {
-            levelToHide.GetComponent<Level> ().HideLevel ();
+            levelToHide.GetComponent<Level>().HideLevel();
             levelToHide = null;
         }
     }
 
     void CreateNewLevel () {
-        var go = Instantiate (levelPrefab).GetComponent<Level> ();
-        go.transform.SetParent (transform);
-        go.Initialize ();
+        var go = Instantiate(levelPrefab).GetComponent<Level>();
+        go.transform.SetParent(transform);
+        go.Initialize();
         go.name = "Level " + levels.Count;
 
-        var newScale = (float) Math.Pow (scaleRatio, maxLevels + 2);
-        go.transform.localScale = new Vector2 (newScale, newScale);
+        var newScale = (float) Math.Pow(scaleRatio, maxLevels + 2);
+        go.transform.localScale = new Vector2(newScale, newScale);
 
-        levels.Add (go.transform);
+        levels.Add(go.transform);
+    }
+
+    void SetLevelColliders () {
+        if (gravity == GravityDirection.UP) {
+            // enable next level collider
+            levels[currentLevel].GetComponent<Level>().SetCollider(true);
+
+            // disable current level collider
+            levels[currentLevel - 1].GetComponent<Level>().SetCollider(false);
+        }
+        else if (gravity == GravityDirection.DOWN) {
+            // enable next level collider
+            levels[currentLevel - 2].GetComponent<Level>().SetCollider(true);
+
+            // disable current level collider
+            levels[currentLevel - 1].GetComponent<Level>().SetCollider(false);
+        }
     }
 
     public void SwitchGravity () {
         if (gravity == GravityDirection.UP) {
-            ScaleLevelsUp ();
+            ScaleLevelsUp();
             gravity = GravityDirection.DOWN;
-            Player.Instance.CeilingToFloor ();
-            if (currentLevel == 2) {
-                levels[0].GetComponent<Level> ().SetCollider (true);
-            }
+            Player.Instance.CeilingToFloor();
         }
         else if (gravity == GravityDirection.DOWN) {
-            ScaleLevelsDown ();
+            ScaleLevelsDown();
             gravity = GravityDirection.UP;
-            Player.Instance.FloorToCeiling ();
+            Player.Instance.FloorToCeiling();
         }
     }
 
@@ -336,21 +362,21 @@ public class LevelManager : MonoBehaviour {
     }
 
     public void ChangeDirection () {
-        Player.Instance.ChangeDirection ();
+        Player.Instance.ChangeDirection();
     }
 
     public void AddCollectable () {
         coins++;
-        coinsText.text = coins.ToString ();
+        coinsText.text = coins.ToString();
     }
 
     public void HideControlsOverlay () {
-        controlsOverlay.SetActive (false);
+        controlsOverlay.SetActive(false);
     }
 
     public void RestartGame () {
-        PlayerPrefs.SetInt ("HighScore", currentLevel);
-        SceneManager.LoadScene ("Game");
+        PlayerPrefs.SetInt("HighScore", currentLevel);
+        SceneManager.LoadScene("Game");
     }
 
     #endregion
