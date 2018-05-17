@@ -37,6 +37,8 @@ public class Level : MonoBehaviour {
     #region Properties
 
     public bool IsActive { get; private set; }
+    
+    public int LevelNumber { get; set; }
 
     #endregion
 

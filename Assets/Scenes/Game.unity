@@ -1202,7 +1202,7 @@ MonoBehaviour:
   maxLevels: 10
   offset: 2
   scaleRatio: 0.7
-  scaleSpeed: 1
+  scaleSpeed: 0.3
   currentLevel: 1
   gravity: 0
   levelPool: {fileID: 535574185}
